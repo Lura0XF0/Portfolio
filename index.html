@@ -112,7 +112,7 @@
       background: linear-gradient(90deg, var(--c1), var(--c3));
       transform-origin: left;
       transform: scaleX(0);
-      
+
       will-change: transform;
       transition: none;
     }
@@ -156,7 +156,7 @@
     }
 
     .logo:hover .shield {
-        
+
         filter: drop-shadow(0 0 8px rgba(56,200,240,.4));
     }
 
@@ -169,8 +169,8 @@
       border-radius: 10px;
       top: 50%;
       left: 50%;
-      
-      box-shadow: 
+
+      box-shadow:
         inset 0 0 0 1px rgba(255,255,255,.2),
         0 2px 6px rgba(56,200,240,.3);
       z-index: 2;
@@ -184,11 +184,11 @@
       background: rgba(255,255,255,.3);
       border-radius: 50%;
       top: 50%;
-      
+
     }
     .bandaid::before { left: 3px; }
     .bandaid::after { right: 3px; }
-    
+
     .nav-links { display: flex; gap: 2px; list-style: none; }
     .nav-links a {
       text-decoration: none; font-family: var(--fm);
@@ -274,7 +274,7 @@
        FADE-UP
     ─────────────────────────────────────── */
     .fu {
-      opacity:0; 
+      opacity:0;
       transition: opacity .6s ease, transform .6s ease;
     }
     .fu.vis { opacity:1;  }
@@ -286,7 +286,7 @@
 
     .hero-eyebrow {
       font-family: var(--fm); font-size: .7rem; letter-spacing: .18em;
-      color: var(--c2); 
+      color: var(--c2);
       display: flex; align-items: center; gap: .45rem; margin-bottom: 1.1rem;
     }
 
@@ -309,7 +309,7 @@
     h1.hero-name span:nth-child(5) { animation-delay: 0.4s; }
     h1.hero-name span:nth-child(6) { animation-delay: 0.5s; }
     h1.hero-name span:nth-child(7) { animation-delay: 0.6s; }
-    
+
     @keyframes wave {
       0%, 100% {  }
       20% {  }
@@ -500,7 +500,7 @@
     .tags { display:flex; flex-wrap:wrap; gap:.38rem; margin-bottom:1.1rem; }
     .tag {
       font-family:var(--fm); font-size:.62rem; padding:.18rem .65rem;
-      border-radius:20px; letter-spacing:.06em; 
+      border-radius:20px; letter-spacing:.06em;
     }
     .t1 { border:1px solid rgba(56,200,240,.22); color:var(--c1); background:rgba(56,200,240,.055); }
     .t2 { border:1px solid rgba(45,245,196,.22); color:var(--c2); background:rgba(45,245,196,.055); }
@@ -612,14 +612,14 @@
       border-radius:14px;
       border:1px solid rgba(255,255,255,.10);
       overflow:hidden;
-      
+
       opacity:0;
       transition: transform .32s cubic-bezier(.23,1,.32,1), opacity .32s ease;
       box-shadow: 0 0 40px rgba(0,0,0,.6);
       z-index:1;
     }
     .cv-modal.active .cv-container{
-      
+
       opacity:1;
     }
     .cv-frame{
@@ -645,10 +645,10 @@
     .cv-close:hover{
       background:#ff2e4d;
       border-color:#ff2e4d;
-      
+
     }
 
-    
+
 /* ───────────────────────────────────────
    TOOLS (SPLIT OFF/DEF)
 ─────────────────────────────────────── */
@@ -684,7 +684,7 @@
 }
 .tools-block .tool:hover {
   background: rgba(255,255,255,.03);
-  
+
 }
 
 /* Hover Offensif = rouge */
@@ -736,7 +736,6 @@
     @media (max-width:460px) {
       .nav-links a { padding:.32rem .5rem; font-size:.66rem; }
     }
-  
 
 
 .fu .glitch{ opacity:1; filter:none; }
@@ -1043,9 +1042,147 @@
   }
 }
 
+
+/* ==== Spacing between Compétences and Contact ==== */
+#competences{
+  margin-bottom: 160px;
+}
+
+
+/* ==== Blur effect for Offensif & Défensif blocks ==== */
+.offensive, .defensive, .xcard, .card-blur {
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: rgba(15, 18, 28, 0.55) !important;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+
+/* ==== Terminal pop (fake prompt) ==== */
+#term-pop{
+  position: fixed;
+  width: min(420px, calc(100vw - 36px));
+  max-height: 260px;
+  border-radius: 14px;
+  overflow: hidden;
+  z-index: 4;
+  background: rgba(10, 14, 22, .78);
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 18px 50px rgba(0,0,0,.50);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  opacity: 0;
+  transform: translateY(10px) scale(.98);
+  pointer-events: none;
+  left: 18px; top: 96px; /* initial (will be randomized) */
+}
+#term-pop.show{
+  transform: translateY(0) scale(1);
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+#term-pop.hide{
+  transform: translateY(10px) scale(.98);
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+
+#term-pop .term-head{
+  display:flex;
+  align-items:center;
+  gap:.45rem;
+  padding: .55rem .75rem;
+  background: rgba(255,255,255,.04);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+#term-pop .term-dot{ width:10px; height:10px; border-radius:999px; display:inline-block; opacity:.9; }
+#term-pop .term-dot.d1{ background:#ff5f56; }
+#term-pop .term-dot.d2{ background:#ffbd2e; }
+#term-pop .term-dot.d3{ background:#27c93f; }
+#term-pop .term-title{
+  margin-left:.35rem;
+  font-size:.82rem;
+  color: rgba(255,255,255,.72);
+  letter-spacing:.02em;
+}
+#term-pop .term-body{
+  margin:0;
+  padding:.8rem .9rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size:.86rem;
+  line-height:1.35;
+  color: rgba(255,255,255,.88);
+  white-space: pre-wrap;
+}
+#term-pop .term-body .prompt{ color: rgba(56,200,240,.95); }
+#term-pop .term-body .cmd{ color: rgba(255,255,255,.92); }
+#term-pop .term-body .out{ color: rgba(190,205,220,.85); }
+#term-pop .cursor{
+  display:inline-block;
+  width:.6ch;
+  background: rgba(255,255,255,.6);
+  margin-left:.15ch;
+  animation: termBlink 1s steps(1,end) infinite;
+  transform: translateY(1px);
+}
+@keyframes termBlink{ 0%,49%{opacity:1} 50%,100%{opacity:0} }
+
+@media (prefers-reduced-motion: reduce){
+  #term-pop{ transition:none !important; }
+  #term-pop .cursor{ animation:none !important; opacity:0; }
+}
+
+
+/* ==== Ensure content stays above terminal pop ==== */
+main{
+  position: relative;
+  z-index: 5;
+}
+
+
+/* ==== Terminal pop readability fixes ==== */
+#term-pop{
+  mix-blend-mode: normal !important;
+  opacity: 0; /* keep hidden by default */
+}
+#term-pop.show{ opacity: .42 !important; } /* visible but not impacting readability */
+#term-pop::before, #term-pop::after{ mix-blend-mode: normal !important; }
+
+/* Prevent any blend/filters from affecting text layers */
+body{ isolation: isolate; }
+main{ isolation: isolate; }
+
+
+/* ==== Targeted Purple (ONLY circle cyan + Experience tags) ==== */
+/* Circle: replace the cyan segment only */
+.id-av::after{
+  background: conic-gradient(
+    #8b5cf6 0deg 120deg,
+    var(--c3) 120deg 240deg,
+    #ff2e4d 240deg 360deg
+  ) !important;
+}
+
+/* Experience tags: only the cyan tag style (.t1) inside Experience section */
+#experiences .t1{
+  color: #8b5cf6 !important;
+  border-color: rgba(139,92,246,.22) !important;
+  background: rgba(139,92,246,.055) !important;
+}
+
 </style>
 </head>
 <body>
+
+  <!-- Terminal pop (fake command prompt) -->
+  <div id="term-pop" aria-hidden="true">
+    <div class="term-head">
+      <span class="term-dot d1"></span><span class="term-dot d2"></span><span class="term-dot d3"></span>
+      <span class="term-title">lura@kali: ~</span>
+    </div>
+    <pre class="term-body"><code id="term-code"></code></pre>
+  </div>
+
 
 <div id="bg-glow"></div>
 <div id="bg-grid"></div>
@@ -1056,13 +1193,56 @@
 <!-- ═══════ NAV ═══════ -->
 <nav id="nav">
   <a href="#home" class="logo">
+  Portfolio
     <div class="logo-mark">
   <svg viewBox="0 0 100 120" class="shield">
-  <path d="M50 5 L88 20 L95 50 L75 95 L50 115 L25 95 L5 50 L12 20 Z"
-        fill="url(#gradRed)" stroke="#111" stroke-width="4"/>
+  <path d="
+        M20 8
+        L80 8
+        L92 8
+        L92 45
+        L92 70
+        L70 105
+        L50 120
+        L30 105
+        L8 70
+        L8 45
+        L8 8 Z"
+        fill="url(#gradRed)"
+        stroke="#111"
+        stroke-width="4"
+        stroke-linejoin="miter"/>
+      <path id="shield-inner" d="
+        M26 16
+        L74 16
+        L84 16
+        L84 50
+        L84 68
+        L66 96
+        L50 110
+        L34 96
+        L16 68
+        L16 50
+        L16 16 Z"
+        fill="none"
+        stroke="rgba(255,255,255,.22)"
+        stroke-width="3"
+        stroke-linejoin="miter"/>
 
-  <path d="M52 15 L44 38 L58 58 L40 82 L50 110"
-        stroke="#111" stroke-width="6" fill="none"
+      <path id="shield-seam" d="M50 12 L50 112"
+        fill="none"
+        stroke="rgba(255,255,255,.18)"
+        stroke-width="2"
+        stroke-linecap="round"/>
+
+
+  <path id="shield-crack-shadow"
+        d="M50 20 L45 32 L54 42 L46 54 L56 66 L48 78 L55 88 L50 108"
+        stroke="rgba(0,0,0,.62)" stroke-width="6.2" fill="none"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="shield-crack"
+        d="M50 20 L45 32 L54 42 L46 54 L56 66 L48 78 L55 88 L50 108"
+        stroke="rgba(255,255,255,.18)" stroke-width="2.4" fill="none"
         stroke-linecap="round" stroke-linejoin="round"/>
 
   <!-- Bigger Blue bandage X -->
@@ -1083,7 +1263,7 @@
   </defs>
 </svg>
 </div>
-    Maxime <span style="color:var(--c1)">Lubrano</span>
+    <span style="color:var(--c1)">Cyber</span>
   </a>
   <ul class="nav-links">
     <li><a href="#home"         class="active">Accueil</a></li>
@@ -1105,9 +1285,6 @@
         <div>
           <p class="hero-eyebrow fu"><span class="dot"></span> Disponible pour alternance M2</p>
 
-          
-
-
 
 <h1 class="hero-name fu glitch-stack">
   <span class="glitch-line">
@@ -1119,17 +1296,13 @@
 </h1>
 
 
-
-
-
           <p class="hero-role fu">
-            <b>//</b> Étudiant M1 → M2 Cybersécurité<br>
-            <b>//</b> Infrastructure · DevOps · Pentest
+            <b>//</b> Étudiant Ynov Toulouse Campus<br>
+            <b>//</b> Filiaire Expert Cybersécurité
           </p>
 
           <p class="hero-desc fu">
-            Passionné de cybersécurité, je construis mes compétences en cours, lors de mon stage chez
-            Kapix et sur HackTheBox. Je recherche une <strong>alternance</strong> pour mettre mes skills
+            Passionné de cybersécurité, je construis mes compétences en cours, sur des projets personnels et sur HackTheBox. Je recherche une <strong>alternance</strong> pour mettre mes skills
             en pratique dans un environnement exigeant.
           </p>
 
@@ -1142,15 +1315,15 @@
 
         <!-- Identity card -->
         <div class="id-card card fu">
-          <div class="id-av">⚔️</div>
+          <div class="id-av">🖥️</div>
           <div class="id-name">Maxime Lubrano</div>
-          <div class="id-role">Cybersécurité · DevOps</div>
+          <div class="id-role">Hardening · DevOps · Infrastructure · Pentest</div>
           <div class="id-sep"></div>
           <div style="width:100%">
-            <div class="id-row"><span class="ik">Niveau</span><span class="iv hi">M1 → M2</span></div>
+            <div class="id-row"><span class="ik">Niveau</span><span class="iv hi">B3</span></div>
             <div class="id-row"><span class="ik">Technologies</span><span class="iv a">20+ maîtrisées</span></div>
             <div class="id-row"><span class="ik">Mobilité</span><span class="iv">Toute la France</span></div>
-            <div class="id-row"><span class="ik">Statut</span><span class="iv hi otw">Open to Work</span></div>
+            <div class="id-row"><span class="ik">Teams</span><span class="iv">Red, Blue, Purple</span></div>
           </div>
         </div>
 
@@ -1162,7 +1335,7 @@
   <section id="cv">
     <div class="wrap">
       <div class="fu">
-        <p class="sec-eyebrow">Savoir</p>
+        <p class="sec-eyebrow">Étapes</p>
         <h2 class="sh">Parcours</h2>
         <p class="sh-sub">Mon parcours académique et universitaire.</p>
       </div>
@@ -1211,7 +1384,7 @@
                 <div class="tl-b">
                   <div class="tl-dt">Continu</div>
                   <div class="tl-t">HackTheBox</div>
-                  <div class="tl-s">Hacking éthique · Machines · CTF</div>
+                  <div class="tl-s">Hacking éthique & Hardening</div>
                   <div class="tl-tx">Exploitation, privilege escalation, web attacks, forensics — pratique régulière hors cursus.</div>
                 </div>
               </div>
@@ -1245,13 +1418,13 @@
           </div>
         </div>
         <div class="tags">
-          <span class="tag t1">Cybersécurité</span>
+          <span class="tag t3">Cybersécurité</span>
           <span class="tag t3">Infrastructure</span>
-          <span class="tag t2">DevOps</span>
+          <span class="tag t3">DevOps</span>
           <span class="tag t3">Nginx</span>
-          <span class="tag t1">Hardening</span>
-          <span class="tag t2">Kubernetes</span>
-          <span class="tag t1">Keycloak</span>
+          <span class="tag t3">Hardening</span>
+          <span class="tag t3">Kubernetes</span>
+          <span class="tag t3">Keycloak</span>
         </div>
         <ul class="xlist">
           <li>Kapix est une startup spécialisée dans un outil No-Code. Mission principale : sécuriser l'infrastructure serveur pour garantir la confidentialité et l'intégrité des données.</li>
@@ -1370,8 +1543,8 @@
           <div class="htb-s">Auto-formation · Hacking éthique · CTF</div>
           <div class="tags">
             <span class="tag t4">Pentest</span>
-            <span class="tag t1">CTF</span>
-            <span class="tag t3">Linux / Windows</span>
+            <span class="tag t3">Herdening</span>
+            <span class="tag t1">Linux / Windows</span>
             <span class="tag t4">Privilege Escalation</span>
             <span class="tag t4">Web Exploits</span>
           </div>
@@ -1394,9 +1567,9 @@
           </div>
         </div>
         <div class="tags">
-          <span class="tag t1">SOC / Blue Team</span>
+          <span class="tag t3">SOC / Blue Team</span>
           <span class="tag t4">Red Team</span>
-          <span class="tag t2">DevSecOps</span>
+          <span class="tag t3">DevSecOps</span>
           <span class="tag t3">Cloud Security</span>
         </div>
         <ul class="xlist">
@@ -1434,7 +1607,7 @@
           <div class="bar"><div class="bar-h"><span class="bar-n">Docker</span><span class="bar-p">65%</span></div><div class="bar-t"><div class="bar-f gn" style="width:65%"></div></div></div>
           <div class="bar"><div class="bar-h"><span class="bar-n">Nginx</span><span class="bar-p">60%</span></div><div class="bar-t"><div class="bar-f gn" style="width:60%"></div></div></div>
           <div class="bar"><div class="bar-h"><span class="bar-n">Kubernetes</span><span class="bar-p">20%</span></div><div class="bar-t"><div class="bar-f gn" style="width:20%"></div></div></div>
-          <div class="bar"><div class="bar-h"><span class="bar-n">Active Directory</span><span class="bar-p">65%</span></div><div class="bar-t"><div class="bar-f gn" style="width:65%"></div></div></div>
+          <div class="bar"><div class="bar-h"><span class="bar-n">Active Directory</span><span class="bar-p">50%</span></div><div class="bar-t"><div class="bar-f gn" style="width:50%"></div></div></div>
         </div>
 
         <div class="sk-card card fu">
@@ -1477,7 +1650,7 @@
               <span class="tool">Suricata</span>
               <span class="tool">pfSense</span>
               <span class="tool">Fail2ban</span>
-              <span class="tool">Snort</span>
+              <span class="tool">ufw</span>
               <span class="tool">Nessus</span>
               <span class="tool">OpenVAS</span>
               <span class="tool">Splunk</span>
@@ -1490,16 +1663,16 @@
 
       <div id="contact" class="cta-card cardct fu">
         <p class="sec-eyebrow" style="justify-content:center;">Contact</p>
-        <div class="cta-t">Une opportunité d'alternance ?</div>
+        <div class="cta-t">Intéréssé par mon profil ?</div>
         <p class="cta-s">Disponible pour une alternance M2 en cybersécurité à partir de la rentrée 2026.</p>
         <div class="cta-links">
-          <a href="/cdn-cgi/l/email-protection#86ebe7feefebe3a8eaf3e4f4e7e8e9c6eee9f2ebe7efeaa8e0f4" class="btn btn-p">✉️ Me contacter</a>
+          <a href="#" id="contact-btn" class="btn btn-p">✉️ Me contacter</a>
           <a href="https://www.linkedin.com/in/maxime-lubrano-66b828263/" target="_blank" class="btn btn-o">LinkedIn</a>
           <a href="https://github.com/Lura0XF0" target="_blank" class="btn btn-o">GitHub</a>
         </div>
       </div>
     </div>
-  
+
 
 </main>
 
@@ -1656,7 +1829,7 @@ window.addEventListener('load', updateActive);
   const cvModal = document.getElementById('cv-modal');
   const cvOv    = document.querySelector('#cv-modal .cv-overlay');
 
-  
+
   const cvClose = document.querySelector('#cv-modal .cv-close');
 function openCV() {
     if (!cvModal) return;
@@ -1688,23 +1861,206 @@ function openCV() {
     for (let i = 0; i < 30; i++) {
       const particle = document.createElement('div');
       particle.className = 'particle';
-      
+
       const startX = Math.random() * 100;
       const drift = (Math.random() - 0.5) * 100;
       const duration = 15 + Math.random() * 20;
       const delay = Math.random() * 10;
       const size = 2 + Math.random() * 3;
-      
+
       particle.style.left = startX + '%';
       particle.style.setProperty('--drift', drift + 'px');
       particle.style.animationDuration = duration + 's';
       particle.style.animationDelay = delay + 's';
       particle.style.width = size + 'px';
       particle.style.height = size + 'px';
-      
+
       particlesContainer.appendChild(particle);
     }
   }
+  document.getElementById("contact-btn").addEventListener("click", function(e){
+    e.preventDefault();
+
+    const encoded = "bWF4aW1lLmx1YnJhbm9AaG90bWFpbC5mcg=="; // ← ton email en base64
+    const decoded = atob(encoded);
+
+    window.location.href = "mailto:" + decoded;
+  });
+</script>
+<script>
+
+/* ── Fake terminal pop ── */
+(() => {
+  const pop = document.getElementById('term-pop');
+  const codeEl = document.getElementById('term-code');
+  if (!pop || !codeEl) return;
+
+  const scenarios = [
+    {
+      cmd: "nmap -sC -sV -Pn -p- 10.10.10.10 -T4",
+      outLines: [
+        "Starting Nmap 7.95 ( https://nmap.org )",
+        "Nmap scan report for 10.10.10.10",
+        "PORT   STATE SERVICE VERSION",
+        "22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu",
+        "80/tcp open  http    nginx 1.18.0",
+        "|_http-title: Landing Page",
+        "|_http-server-header: nginx/1.18.0 (Ubuntu)"
+      ]
+    },
+    {
+      cmd: "nmap --script vuln -p 80,443 10.10.10.10",
+      outLines: [
+        "PORT    STATE SERVICE",
+        "80/tcp  open  http",
+        "| http-vuln-cve2017-5638:",
+        "|   VULNERABLE",
+        "|_  Apache Struts RCE (CVE-2017-5638) (simulated output)"
+      ]
+    },
+    {
+      cmd: "netexec smb 10.10.10.10 -u user -p 'Password123!'",
+      outLines: [
+        "SMB         10.10.10.10  445  DC01  [*] Windows 10.0 Build 17763 x64",
+        "SMB         10.10.10.10  445  DC01  [+] user:Password123! (Pwn3d!)"
+      ]
+    },
+    {
+      cmd: "netexec winrm 10.10.10.10 -u user -p 'Password123!'",
+      outLines: [
+        "WINRM       10.10.10.10  5985 DC01  [+] user:Password123! (Valid credentials)"
+      ]
+    },
+    {
+      cmd: "ffuf -u http://10.10.10.10/FUZZ -w /usr/share/wordlists/dirb/common.txt -fc 404",
+      outLines: [
+        "admin           [Status: 301, Size: 0, Words: 1, Lines: 1]",
+        "backup          [Status: 200, Size: 1248, Words: 210, Lines: 32]",
+        "api             [Status: 200, Size: 512, Words: 40, Lines: 14]",
+        "login           [Status: 200, Size: 980, Words: 120, Lines: 18]"
+      ]
+    },
+    {
+      cmd: "sqlmap -u \"http://10.10.10.10/item.php?id=1\" --batch --dbs",
+      outLines: [
+        "[*] testing connection to the target URL",
+        "[+] parameter 'id' appears to be injectable",
+        "[*] available databases [2]:",
+        "[*] information_schema",
+        "[*] appdb"
+      ]
+    },
+    {
+      cmd: "hydra -l admin -P rockyou.txt 10.10.10.10 http-post-form \"/login:username=^USER^&password=^PASS^:F=invalid\" -t 16",
+      outLines: [
+        "[80][http-post-form] host: 10.10.10.10   login: admin   password: admin123"
+      ]
+    }
+  ];
+
+
+  // Pick scenarios without repeating too often
+  let pool = [];
+  function shuffle(arr){
+    for (let i = arr.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+  function pickScenario(){
+    if (pool.length === 0) pool = shuffle([...scenarios]);
+    return pool.pop();
+  }
+const promptHTML = '<span class="prompt">lura@kali</span>:<span class="prompt">~</span>$ ';
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+  function show(){ pop.classList.remove('hide'); pop.classList.add('show'); }
+  function hide(){ pop.classList.remove('show'); pop.classList.add('hide'); }
+
+  function randomizePosition(){
+    // Measure with visibility hidden so no user flash
+    const prevVis = pop.style.visibility;
+    pop.style.visibility = 'hidden';
+    pop.classList.add('show');
+    const rect = pop.getBoundingClientRect();
+    pop.classList.remove('show');
+    pop.style.visibility = prevVis || '';
+
+    const w = rect.width || 420;
+    const h = rect.height || 220;
+    const pad = 18;
+    const navSafe = 90;
+
+    const maxX = Math.max(pad, window.innerWidth - w - pad);
+    const maxY = Math.max(navSafe, window.innerHeight - h - pad);
+
+    const x = pad + Math.random() * (maxX - pad);
+    const y = navSafe + Math.random() * (maxY - navSafe);
+
+    pop.style.left = x + 'px';
+    pop.style.top  = y + 'px';
+  }
+
+  async function typeCommand(cmd){
+    codeEl.innerHTML = promptHTML + '<span class="cmd"></span><span class="cursor"></span>';
+    const cmdEl = codeEl.querySelector('.cmd');
+    const cursor = codeEl.querySelector('.cursor');
+
+    for (const ch of cmd){
+      cmdEl.textContent += ch;
+      await sleep(10 + Math.random()*22);
+    }
+    cursor.remove();
+    codeEl.innerHTML += "\n";
+  }
+
+  function addOutput(out){
+    const safe = out.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    codeEl.innerHTML += `<span class="out">${safe}</span>\n`;
+  }
+
+  let running = false;
+
+  async function runOnce(){
+    if (running) return;
+    running = true;
+
+    const s = pickScenario();
+    randomizePosition();
+    show();
+
+    await sleep(120);
+    await typeCommand(s.cmd);
+    await sleep(1000);
+    addOutput((s.outLines ? s.outLines.join("\n") : (s.out || "")));
+
+    await sleep(2000);
+    hide();
+    await sleep(280);
+    codeEl.textContent = "";
+    running = false;
+  }
+
+  function schedule(){
+    const next = 15000 + Math.random()*22000; // 9–20s
+    setTimeout(async () => {
+      await runOnce();
+      schedule();
+    }, next);
+  }
+
+  window.addEventListener('load', () => {
+    // first pop quickly so you see it
+    setTimeout(runOnce, 1200);
+    schedule();
+  });
+
+  // quick test: click logo to trigger
+  const logo = document.querySelector('#nav .logo');
+  if (logo) logo.addEventListener('click', (e) => { e.preventDefault(); runOnce(); });
+})();
+
 </script>
 </body>
 </html>
