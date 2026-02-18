@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maxime Lubrano — Cybersécurité</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ───────────────────────────────────────
+       RESET & VARS
+    ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 78px; }
+
+    :root {
+      --bg:      #050a12;
+      --gl:      rgba(255,255,255,0.035);
+      --gl2:     rgba(255,255,255,0.06);
+      --bd:      rgba(255,255,255,0.08);
+      --bd2:     rgba(56,200,240,0.26);
+      --c1:      #38c8f0;
+      --c2:      #2df5c4;
+      --c3:      #5a7fff;
+      --c4:      #ff2e4d;
+      --t:       #d8e8f5;
+      --tm:      #607080;
+      --td:      #253545;
+      --fh:      'DM Sans', sans-serif;
+      --fm:      'JetBrains Mono', monospace;
+      --nh:      68px;
+      --r:       14px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--t);
+      font-family: var(--fh);
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--c1); border-radius: 4px; }
+
+    /* ───────────────────────────────────────
+       BACKGROUND
+    ─────────────────────────────────────── */
+    #bg-glow {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 5% 10%,  rgba(56,200,240,.065) 0%, transparent 55%),
+        radial-gradient(ellipse 65% 55% at 95% 85%, rgba(90,127,255,.065) 0%, transparent 55%),
+        radial-gradient(ellipse 45% 40% at 55% 45%, rgba(45,245,196,.04)  0%, transparent 55%);
+      animation: glow 22s ease-in-out infinite alternate;
+    }
+    @keyframes glow { 0%{opacity:1;transform:scale(1)} 100%{opacity:.7;transform:scale(1.07)} }
+
+    #bg-grid {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(56,200,240,.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,200,240,.022) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+
+    /* ───────────────────────────────────────
+       SCROLL BAR
+    ─────────────────────────────────────── */
+    #pbar{
+      position: fixed;
+      top: var(--nh);
+      left: 0; right: 0;
+      height: 2px;
+      z-index: 200;
+      background: linear-gradient(90deg, var(--c1), var(--c3));
+      transform-origin: left;
+      transform: scaleX(0);
+      will-change: transform;
+      transition: none;
+    }
+
+    /* ───────────────────────────────────────
+       NAVBAR
+    ─────────────────────────────────────── */
+    #nav {
+      position: fixed; top: 0; inset-inline: 0; z-index: 100;
+      height: var(--nh);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem;
+      background: rgba(5,10,18,.5);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border-bottom: 1px solid var(--bd);
+      transition: background .3s;
+    }
+    #nav.scrolled { background: rgba(5,10,18,.88); }
+
+    .logo {
+      text-decoration: none; color: var(--t);
+      font-family: var(--fh); font-size: .98rem; font-weight: 600;
+      letter-spacing: .02em;
+      display: flex; align-items: center; gap: 10px;
+    }
+    /* Red shield mark */
+    .logo-mark {
+        width: 36px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .shield {
+        width: 100%;
+        height: 100%;
+        transition: transform .3s ease, filter .3s ease;
+    }
+
+    .logo:hover .shield {
+        transform: scale(1.08);
+        filter: drop-shadow(0 0 8px rgba(56,200,240,.4));
+    }
+    
+    .nav-links { display: flex; gap: 2px; list-style: none; }
+    .nav-links a {
+      text-decoration: none; font-family: var(--fm);
+      font-size: .72rem; color: var(--tm); letter-spacing: .07em;
+      padding: .38rem .88rem; border-radius: 8px;
+      border: 1px solid transparent; transition: all .18s;
+    }
+    .nav-links a:hover        { color: var(--t); background: var(--gl); }
+    .nav-links a.active       { color: var(--c1); background: rgba(56,200,240,.07); border-color: rgba(56,200,240,.16); }
+
+    .badge {
+      font-family: var(--fm); font-size: .65rem; padding: .18rem .6rem;
+      border-radius: 20px; border: 1px solid rgba(45,245,196,.33);
+      color: var(--c2); background: rgba(45,245,196,.06);
+      display: flex; align-items: center; gap: .3rem;
+    }
+    .dot { width:5px; height:5px; border-radius:50%; background:var(--c2); animation: blink 1.4s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.1} }
+
+    /* ───────────────────────────────────────
+       LAYOUT
+    ─────────────────────────────────────── */
+    main { position: relative; z-index: 1; }
+
+    section {
+      min-height: 100vh;
+      padding: calc(var(--nh) + 80px) 0 90px;
+    }
+    #home { display: flex; align-items: center; }
+
+    .wrap { width: min(1060px, 90%); margin: 0 auto; }
+
+    .sec-eyebrow {
+      font-family: var(--fm); font-size: .65rem; letter-spacing: .22em;
+      text-transform: uppercase; color: var(--c1);
+      display: flex; align-items: center; gap: .55rem; margin-bottom: .55rem;
+    }
+    .sec-eyebrow::before { content:''; display:block; width:18px; height:1px; background:var(--c1); }
+
+    h2.sh {
+      font-family: var(--fh);
+      font-size: clamp(1.9rem, 3.2vw, 2.5rem);
+      font-weight: 700; letter-spacing: -.025em; line-height: 1.1;
+      margin-bottom: .55rem;
+    }
+    .sh-sub { font-size: .88rem; color: var(--tm); max-width: 480px; margin-bottom: 2.75rem; }
+
+    /* ───────────────────────────────────────
+       GLASS CARD
+    ─────────────────────────────────────── */
+    .card {
+      background: var(--gl); border: 1px solid var(--bd); border-radius: var(--r);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .cardct {
+      background: var(--gl); border: 1px solid var(--bd);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      transition: border-color .3s, box-shadow .3s;
+    }
+
+    .card:hover { border-color: var(--bd2); box-shadow: 0 4px 36px rgba(56,200,240,.055); }
+
+    /* ───────────────────────────────────────
+       BUTTONS
+    ─────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: .42rem;
+      padding: .6rem 1.4rem; border-radius: 9px;
+      font-family: var(--fm); font-size: .76rem; letter-spacing: .06em;
+      text-decoration: none; cursor: pointer;
+      border: 1px solid transparent; transition: all .2s ease;
+    }
+    .btn-p {
+      background: linear-gradient(135deg, rgba(56,200,240,.88), rgba(90,127,255,.88));
+      color: #04080f; font-weight: 600;
+    }
+    .btn-p:hover { transform: translateY(-2px); box-shadow: 0 7px 24px rgba(56,200,240,.22); }
+    .btn-o { background: transparent; border-color: var(--bd); color: var(--tm); }
+    .btn-o:hover { border-color: var(--c1); color: var(--c1); transform: translateY(-2px); }
+
+    /* ───────────────────────────────────────
+       FADE-UP
+    ─────────────────────────────────────── */
+    .fu {
+      opacity:0; transform:translateY(22px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .fu.vis { opacity:1; transform:translateY(0); }
+
+    /* ═══════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════ */
+    .hero-grid { display: grid; grid-template-columns: 1fr 280px; gap: 3rem; align-items: center; }
+
+    .hero-eyebrow {
+      font-family: var(--fm); font-size: .7rem; letter-spacing: .18em;
+      color: var(--c2); text-transform: uppercase;
+      display: flex; align-items: center; gap: .45rem; margin-bottom: 1.1rem;
+    }
+
+    h1.hero-name {
+      font-family: var(--fh);
+      font-size: clamp(3rem, 6.5vw, 5.2rem);
+      font-weight: 700; line-height: 1.0; letter-spacing: -.03em;
+      margin-bottom: .9rem;
+    }
+    h1.hero-name em {
+      font-style: normal; display: block;
+      background: linear-gradient(100deg, var(--c1) 20%, var(--c3) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    .hero-role {
+      font-family: var(--fm); font-size: .82rem; color: var(--tm);
+      padding-left: .85rem; border-left: 2px solid rgba(90,127,255,.45);
+      margin-bottom: 1.5rem; line-height: 2.1;
+    }
+    .hero-role b { color: var(--c1); font-weight: 400; }
+
+    .hero-desc { font-size: .93rem; color: var(--tm); max-width: 490px; margin-bottom: 1.75rem; }
+
+    .hero-ctas { display: flex; gap: .65rem; flex-wrap: wrap; margin-bottom: 2.25rem; }
+
+    .hero-stats { display: flex; gap: .65rem; flex-wrap: wrap; }
+    .hstat { padding: .55rem 1rem; display:flex; flex-direction:column; gap:.08rem; }
+    .hstat-n {
+      font-family: var(--fh); font-size: 1.25rem; font-weight: 700;
+      background: linear-gradient(90deg, var(--c1), var(--c2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hstat-l { font-family: var(--fm); font-size: .62rem; color: var(--tm); letter-spacing: .1em; }
+
+    /* ID card */
+    .id-card {
+      padding: 1.75rem 1.5rem; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: .9rem;
+    }
+    .id-av {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: linear-gradient(135deg, rgba(56,200,240,.1), rgba(90,127,255,.12));
+      border: 1px solid var(--bd);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; position: relative;
+    }
+    /* Thin rotating arc instead of full ring */
+    .id-av::after {
+      content: ''; position: absolute; inset: -5px; border-radius: 50%;
+      border: 1.5px solid transparent;
+      border-top-color: var(--c1); border-right-color: var(--c3);
+      animation: arc 5s linear infinite;
+    }
+    @keyframes arc { to { transform: rotate(360deg); } }
+    .id-name { font-weight: 700; font-size: .92rem; }
+    .id-role { font-family: var(--fm); font-size: .62rem; color: var(--c1); letter-spacing: .1em; text-transform: uppercase; }
+    .id-sep { width: 100%; height: 1px; background: var(--bd); }
+    .id-row {
+      display: flex; justify-content: space-between; width: 100%;
+      font-family: var(--fm); font-size: .68rem;
+      padding: .35rem 0; border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .id-row:last-child { border: none; }
+    .ik { color: var(--td); }
+    .iv { color: var(--tm); }
+    .iv.hi { color: var(--c2); }
+
+    /* Terminal */
+    .terminal {
+      margin-top: 2.25rem;
+      background: rgba(3,7,14,.82); border: 1px solid var(--bd); border-radius: var(--r);
+      overflow: hidden;
+    }
+    .tbar {
+      padding: .5rem .95rem; background: rgba(255,255,255,.022);
+      border-bottom: 1px solid var(--bd);
+      display: flex; align-items: center; gap: .38rem;
+    }
+    .td2 { width: 10px; height: 10px; border-radius: 50%; }
+    .td2:nth-child(1){background:#ff5f57}.td2:nth-child(2){background:#febc2e}.td2:nth-child(3){background:#28c840}
+    .tlbl { margin-left: auto; font-family: var(--fm); font-size: .6rem; color: var(--td); }
+    .tbody { padding: .85rem 1.1rem; font-family: var(--fm); font-size: .76rem; line-height: 2.1; }
+    .tp   { color: var(--c2); }
+    .tc2b { color: var(--t); }
+    .to2  { color: var(--tm); padding-left: 1rem; display: block; }
+    .cur  { display:inline-block; width:7px; height:13px; background:var(--c1); vertical-align:middle; animation: blink 1s step-end infinite; }
+
+    /* ═══════════════════════════════════════
+       CV
+    ═══════════════════════════════════════ */
+    .cv-layout { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+
+    .cv-aside { display: flex; flex-direction: column; gap: 1.1rem; }
+    .icard { padding: 1.4rem; }
+    .irow {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding: .45rem 0; border-bottom: 1px solid rgba(255,255,255,.04);
+      font-size: .78rem; gap: .4rem;
+    }
+    .irow:last-child { border: none; }
+    .ikey { color: var(--tm); flex-shrink:0; }
+    .ival { color: var(--t); text-align:right; }
+    .ival.a { color: var(--c1); }
+    .ival.b { color: var(--c2); }
+
+    .cv-main { display: flex; flex-direction: column; gap: 2rem; }
+    .block-ttl {
+      font-family: var(--fm); font-size: .65rem; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--c1);
+      margin-bottom: 1.15rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .block-ttl::after { content:''; flex:1; height:1px; background: var(--bd); }
+
+    /* Timeline */
+    .tl { display: flex; flex-direction: column; }
+    .tl-i { display: flex; gap: .95rem; padding-bottom: 1.65rem; }
+    .tl-i:last-child { padding-bottom: 0; }
+    .tl-sp { display: flex; flex-direction: column; align-items: center; width: 13px; flex-shrink:0; }
+    .tl-d {
+      width: 11px; height: 11px; border-radius: 50%;
+      border: 2px solid var(--c1); background: var(--bg);
+      flex-shrink:0; margin-top: 5px; box-shadow: 0 0 7px rgba(56,200,240,.32);
+    }
+    .tl-d.g { border-color:var(--c2); box-shadow:0 0 7px rgba(45,245,196,.32); }
+    .tl-d.p { border-color:var(--c3); box-shadow:0 0 7px rgba(90,127,255,.32); }
+    .tl-ln { flex:1; width:1px; background: linear-gradient(to bottom, var(--bd), transparent); margin-top:3px; }
+    .tl-b { flex:1; }
+    .tl-dt { font-family:var(--fm); font-size:.63rem; color:var(--td); margin-bottom:.22rem; }
+    .tl-t  { font-size:.93rem; font-weight:600; margin-bottom:.12rem; }
+    .tl-s  { font-family:var(--fm); font-size:.7rem; color:var(--c2); margin-bottom:.45rem; }
+    .tl-tx { font-size:.81rem; color:var(--tm); line-height:1.65; }
+
+    /* ═══════════════════════════════════════
+       EXPÉRIENCES
+    ═══════════════════════════════════════ */
+    .xcard {
+      padding: 2rem 2.2rem; margin-bottom: 1.4rem;
+      position: relative; overflow: hidden;
+    }
+    .xcard::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      transparent);
+    }
+
+    .xhdr { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.1rem; flex-wrap:wrap; gap:.65rem; }
+    .xco  { font-size:1.3rem; font-weight:700; letter-spacing:-.01em; }
+    .xrole { font-family:var(--fm); font-size:.72rem; color:var(--c1); margin-top:.18rem; }
+    .xmeta { display:flex; flex-direction:column; align-items:flex-end; gap:.3rem; }
+    .xdate { font-family:var(--fm); font-size:.68rem; color:var(--tm); padding:.22rem .7rem; border-radius:20px; border:1px solid var(--bd); }
+    .xloc  { font-family:var(--fm); font-size:.65rem; color:var(--td); }
+
+    .tags { display:flex; flex-wrap:wrap; gap:.38rem; margin-bottom:1.1rem; }
+    .tag {
+      font-family:var(--fm); font-size:.62rem; padding:.18rem .65rem;
+      border-radius:20px; letter-spacing:.06em; text-transform:uppercase;
+    }
+    .t1 { border:1px solid rgba(56,200,240,.22); color:var(--c1); background:rgba(56,200,240,.055); }
+    .t2 { border:1px solid rgba(45,245,196,.22); color:var(--c2); background:rgba(45,245,196,.055); }
+    .t3 { border:1px solid rgba(90,127,255,.22); color:var(--c3); background:rgba(90,127,255,.055); }
+    .t4 { border:1px solid rgba(255,46,77,.22); color:var(--c4); background:rgba(255,46,77,.055); }
+
+    .xlist { list-style:none; display:flex; flex-direction:column; gap:.5rem; }
+    .xlist li { font-size:.83rem; color:var(--tm); display:flex; gap:.65rem; align-items:flex-start; line-height:1.6; }
+    .xlist li::before { content:'▸'; color:var(--c1); flex-shrink:0; font-size:.7rem; margin-top:.19rem; }
+
+    /* Week accordion */
+    .wk-wrap { display:flex; flex-direction:column; gap:.5rem; margin-top:1.4rem; }
+    .wk-lbl { font-family:var(--fm); font-size:.62rem; color:var(--tm); letter-spacing:.14em; text-transform:uppercase; margin-bottom:.15rem; }
+    .wk {
+      border:1px solid var(--bd); border-radius:10px; overflow:hidden;
+      transition: border-color .22s;
+    }
+    .wk:hover { border-color: rgba(56,200,240,.2); }
+    .wk-h {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:.72rem 1rem; cursor:pointer;
+      background: var(--gl); font-size:.82rem; font-weight:600;
+      user-select:none; transition: background .18s;
+    }
+    .wk-h:hover { background:var(--gl2); }
+    .wk-arr { font-family:var(--fm); font-size:.78rem; color:var(--c1); transition:transform .22s ease; }
+    .wk.open .wk-arr { transform:rotate(90deg); }
+    .wk-body { max-height:0; overflow:hidden; transition:max-height .32s ease; }
+    .wk.open .wk-body { max-height:500px; }
+    .wk-inner { padding:.75rem 1rem .9rem; border-top:1px solid var(--bd); }
+    .wk-list { list-style:none; display:flex; flex-direction:column; gap:.4rem; }
+    .wk-list li { font-size:.79rem; color:var(--tm); display:flex; gap:.55rem; align-items:flex-start; line-height:1.6; }
+    .wk-list li::before { content:'—'; color:var(--c1); flex-shrink:0; }
+
+    /* HTB */
+    .htb { padding:1.7rem 2rem; display:flex; gap:1.65rem; align-items:flex-start; }
+    .htb-i {
+      width:50px; height:50px; border-radius:12px; flex-shrink:0;
+      background:linear-gradient(135deg,rgba(56,200,240,.09),rgba(90,127,255,.09));
+      border:1px solid rgba(56,200,240,.16);
+      display:flex; align-items:center; justify-content:center; font-size:1.45rem;
+    }
+    .htb-b { flex:1; }
+    .htb-t { font-size:.97rem; font-weight:700; margin-bottom:.18rem; }
+    .htb-s { font-family:var(--fm); font-size:.7rem; color:var(--c1); margin-bottom:.7rem; }
+
+    /* ═══════════════════════════════════════
+       COMPÉTENCES
+    ═══════════════════════════════════════ */
+    .sk-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; }
+    .sk-card { padding:1.55rem; }
+    .sk-ico  { font-size:1.3rem; margin-bottom:.55rem; }
+    .sk-cat  { font-size:.86rem; font-weight:700; margin-bottom:1.1rem; }
+
+    .bar { margin-bottom:.85rem; }
+    .bar-h { display:flex; justify-content:space-between; margin-bottom:.28rem; }
+    .bar-n { font-family:var(--fm); font-size:.73rem; color:var(--tm); }
+    .bar-p { font-family:var(--fm); font-size:.66rem; color:var(--c1); }
+    .bar-t { height:3px; border-radius:2px; background:rgba(255,255,255,.05); overflow:hidden; }
+    .bar-f {
+      height:100%; border-radius:2px;
+      background: linear-gradient(90deg, var(--c1), var(--c3));
+      transform:scaleX(0); transform-origin:left;
+      transition: transform 1.15s cubic-bezier(.23,1,.32,1);
+    }
+    .bar-f.gn { background:linear-gradient(90deg,var(--c2),var(--c1)); }
+    .bar-f.pu { background:linear-gradient(90deg,var(--c3),var(--c1)); }
+    .bar-f.vis { transform:scaleX(1); }
+
+    .tools-card { padding:1.55rem; margin-top:1.2rem; }
+    .tools-ttl  { font-size:.86rem; font-weight:700; margin-bottom:.9rem; }
+    .tools { display:flex; flex-wrap:wrap; gap:.4rem; }
+    .tool {
+      font-family:var(--fm); font-size:.68rem; padding:.28rem .75rem;
+      border-radius:8px; background:var(--gl); border:1px solid var(--bd);
+      color:var(--tm); transition:all .18s;
+    }
+    .tool:hover { border-color:var(--c1); color:var(--c1); }
+
+
+    /* ═════ CV MODAL ═════ */
+    .cv-modal{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:999;
+      visibility:hidden;
+      opacity:0;
+      transition: opacity .3s ease, visibility .3s ease;
+    }
+    .cv-modal.active{
+      visibility:visible;
+      opacity:1;
+    }
+    .cv-overlay{
+      position:absolute;
+      inset:0;
+      background: rgba(0,0,0,.75);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .cv-container{
+      position:relative;
+      width:min(900px, 92%);
+      height:85%;
+      background:#0b0f16;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+      transform: translateY(14px) scale(.94);
+      opacity:0;
+      transition: transform .32s cubic-bezier(.23,1,.32,1), opacity .32s ease;
+      box-shadow: 0 0 40px rgba(0,0,0,.6);
+      z-index:1;
+    }
+    .cv-modal.active .cv-container{
+      transform: translateY(0) scale(1);
+      opacity:1;
+    }
+    .cv-frame{
+      width:100%;
+      height:100%;
+      border:none;
+    }
+    .cv-close{
+      position:absolute;
+      top:10px;
+      right:12px;
+      z-index:10;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:#fff;
+      padding:.35rem .75rem;
+      border-radius:8px;
+      cursor:pointer;
+      transition: all .2s ease;
+      font-family: var(--fm);
+      font-size: .72rem;
+    }
+    .cv-close:hover{
+      background:#ff2e4d;
+      border-color:#ff2e4d;
+      transform: translateY(-1px);
+    }
+
+    
+/* ───────────────────────────────────────
+   TOOLS (SPLIT OFF/DEF)
+─────────────────────────────────────── */
+.tools-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin-top: 1rem;
+}
+.tools-block {
+  padding: 1.15rem;
+  border-radius: 12px;
+  background: rgba(255,255,255,.015);
+  border: 1px solid rgba(255,255,255,.06);
+}
+.tools-subttl {
+  font-family: var(--fm);
+  font-size: .7rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--tm);
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  margin-bottom: .85rem;
+}
+.tools-ico { font-size: .95rem; }
+
+/* Outils gris par défaut */
+.tools-block .tool {
+  color: var(--tm);
+  border-color: rgba(255,255,255,.08);
+  background: rgba(255,255,255,.02);
+}
+.tools-block .tool:hover {
+  background: rgba(255,255,255,.03);
+  transform: translateY(-1px);
+}
+
+/* Hover Offensif = rouge */
+.tools-block.offensive .tool:hover {
+  border-color: rgba(255,46,77,.55);
+  color: #ff2e4d;
+  box-shadow: 0 0 18px rgba(255,46,77,.12);
+}
+
+/* Hover Défensif = bleu */
+.tools-block.defensive .tool:hover {
+  border-color: rgba(56,200,240,.55);
+  color: var(--c1);
+  box-shadow: 0 0 18px rgba(56,200,240,.12);
+}
+
+@media (max-width: 720px) {
+  .tools-split { grid-template-columns: 1fr; }
+}
+/* CTA */
+    .cta-card { padding:2.25rem; text-align:center; margin-top:2rem; border-color:rgba(56,200,240,.1); }
+    .cta-t { font-size:1.35rem; font-weight:700; letter-spacing:-.01em; margin-bottom:.6rem; }
+    .cta-s { font-size:.86rem; color:var(--tm); max-width:430px; margin:0 auto 1.65rem; }
+    .cta-links { display:flex; gap:.65rem; justify-content:center; flex-wrap:wrap; }
+
+    /* Footer */
+    footer {
+      position:relative; z-index:1; text-align:center; padding:2.25rem;
+      border-top:1px solid var(--bd);
+      font-family:var(--fm); font-size:.7rem; color:var(--td);
+    }
+    footer a { color:var(--c1); text-decoration:none; }
+
+    /* ───────────────────────────────────────
+       RESPONSIVE
+    ─────────────────────────────────────── */
+    @media (max-width:920px) {
+      #nav { padding:0 1.25rem; }
+      .hero-grid { grid-template-columns:1fr; }
+      .id-card { display:none; }
+      .cv-layout { grid-template-columns:1fr; }
+      .sk-grid { grid-template-columns:1fr 1fr; }
+      .htb { flex-direction:column; }
+    }
+    @media (max-width:620px) {
+      .sk-grid { grid-template-columns:1fr; }
+      .badge  { display:none; }
+    }
+    @media (max-width:460px) {
+      .nav-links a { padding:.32rem .5rem; font-size:.66rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="bg-glow"></div>
+<div id="bg-grid"></div>
+<div id="pbar"></div>
+
+<!-- ═══════ NAV ═══════ -->
+<nav id="nav">
+  <a href="#home" class="logo">
+    <div class="logo-mark">
+  <svg viewBox="0 0 100 120" class="shield">
+    
+    <!-- Bouclier plus anguleux -->
+    <path d="M50 5 
+             L88 20 
+             L95 50 
+             L75 95 
+             L50 115 
+             L25 95 
+             L5 50 
+             L12 20 Z"
+          fill="url(#gradRed)"
+          stroke="#111"
+          stroke-width="4"/>
+
+    <!-- Fissure plus agressive -->
+    <path d="M52 15 
+             L44 38 
+             L58 58 
+             L40 82 
+             L50 110"
+          stroke="#111"
+          stroke-width="6"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+
+    <defs>
+      <linearGradient id="gradRed" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#ff2e4d"/>
+        <stop offset="100%" stop-color="#b3001e"/>
+      </linearGradient>
+    </defs>
+
+  </svg>
+</div>
+    Maxime <span style="color:var(--c1)">Lubrano</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#home"         class="active">Accueil</a></li>
+    <li><a href="#cv"           >Parcours</a></li>
+    <li><a href="#experiences"  >Expériences</a></li>
+    <li><a href="#competences"  >Compétences</a></li>
+      <li><a href="#contact"     >Contact</a></li>
+  </ul>
+  <div class="badge"><span class="dot"></span>Open to Work</div>
+</nav>
+
+<main>
+
+  <!-- ═══════ ACCUEIL ═══════ -->
+  <section id="home">
+    <div class="wrap">
+      <div class="hero-grid">
+
+        <div>
+          <p class="hero-eyebrow fu"><span class="dot"></span> Disponible pour alternance M2</p>
+
+          <h1 class="hero-name fu">
+            Maxime
+            <em>Lubrano</em>
+          </h1>
+
+          <p class="hero-role fu">
+            <b>//</b> Étudiant M1 → M2 Cybersécurité<br>
+            <b>//</b> Infrastructure · DevOps · Pentest
+          </p>
+
+          <p class="hero-desc fu">
+            Passionné de cybersécurité, je construis mes compétences en cours, lors de mon stage chez
+            Kapix et sur HackTheBox. Je recherche une <strong>alternance</strong> pour mettre mes skills
+            en pratique dans un environnement exigeant.
+          </p>
+
+          <div class="hero-ctas fu">
+            <a href="#experiences" class="btn btn-p">→ Expériences</a>
+            <a href="#competences" class="btn btn-o">⌗ Compétences</a>
+            <a href="./cv.pdf" id="cvbtn" class="btn btn-p">📄 Télécharger mon CV</a>
+          </div>
+        </div>
+
+        <!-- Identity card -->
+        <div class="id-card card fu">
+          <div class="id-av">⚔️</div>
+          <div class="id-name">Maxime Lubrano</div>
+          <div class="id-role">Cybersécurité · DevOps</div>
+          <div class="id-sep"></div>
+          <div style="width:100%">
+            <div class="id-row"><span class="ik">Niveau</span><span class="iv hi">M1 → M2</span></div>
+            <div class="id-row"><span class="ik">Technologies</span><span class="iv a">20+ maîtrisées</span></div>
+            <div class="id-row"><span class="ik">Mobilité</span><span class="iv">Toute la France</span></div>
+            <div class="id-row"><span class="ik">Statut</span><span class="iv hi">Open to Work</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ CV ═══════ -->
+  <section id="cv">
+    <div class="wrap">
+      <div class="fu">
+        <p class="sec-eyebrow">Savoir</p>
+        <h2 class="sh">Parcours</h2>
+        <p class="sh-sub">Mon parcours académique et universitaire.</p>
+      </div>
+
+      <div class="cv-layout">
+
+        <div class="cv-main fu">
+          <div>
+            <div class="block-ttl">Formation</div>
+            <div class="tl">
+              <div class="tl-i">
+                <div class="tl-sp"><div class="tl-d"></div><div class="tl-ln"></div></div>
+                <div class="tl-b">
+                  <div class="tl-dt">2024 — 2026</div>
+                  <div class="tl-t">Master Cybersécurité</div>
+                  <div class="tl-s">M1 en cours → M2</div>
+                  <div class="tl-tx">Sécurité des systèmes, pentest, cryptographie, gouvernance SSI et DevSecOps.</div>
+                </div>
+              </div>
+              <div class="tl-i">
+                <div class="tl-sp"><div class="tl-d g"></div></div>
+                <div class="tl-b">
+                  <div class="tl-dt">2021 — 2024</div>
+                  <div class="tl-t">Licence Informatique</div>
+                  <div class="tl-s">Fondamentaux &amp; sécurité</div>
+                  <div class="tl-tx">Développement, réseaux, systèmes d'exploitation et introduction à la cybersécurité.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="block-ttl">Expériences clés</div>
+            <div class="tl">
+              <div class="tl-i">
+                <div class="tl-sp"><div class="tl-d"></div><div class="tl-ln"></div></div>
+                <div class="tl-b">
+                  <div class="tl-dt">Été 2024 · 6 semaines</div>
+                  <div class="tl-t">Stage — Kapix</div>
+                  <div class="tl-s">Ingénieur Cybersécurité</div>
+                  <div class="tl-tx">Sécurisation des serveurs, Nginx, DDoS mitigation, Kubernetes, Keycloak, GeoIP, staging sécurisé.</div>
+                </div>
+              </div>
+              <div class="tl-i">
+                <div class="tl-sp"><div class="tl-d g"></div><div class="tl-ln"></div></div>
+                <div class="tl-b">
+                  <div class="tl-dt">Continu</div>
+                  <div class="tl-t">HackTheBox</div>
+                  <div class="tl-s">Hacking éthique · Machines · CTF</div>
+                  <div class="tl-tx">Exploitation, privilege escalation, web attacks, forensics — pratique régulière hors cursus.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ EXPÉRIENCES ═══════ -->
+  <section id="experiences">
+    <div class="wrap">
+      <div class="fu">
+        <p class="sec-eyebrow">Terrain</p>
+        <h2 class="sh">Expériences Pro</h2>
+        <p class="sh-sub">Ce que j'ai fait et ce que j'ai appris.</p>
+      </div>
+
+      <!-- Kapix -->
+      <div class="xcard card fu">
+        <div class="xhdr">
+          <div>
+            <div class="xco">Kapix</div>
+            <div class="xrole">Ingénieur Cybersécurité · Stage</div>
+          </div>
+          <div class="xmeta">
+            <div class="xdate">Été 2024 · 6 semaines</div>
+            <div class="xloc">📍 France</div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag t1">Cybersécurité</span>
+          <span class="tag t3">Infrastructure</span>
+          <span class="tag t2">DevOps</span>
+          <span class="tag t3">Nginx</span>
+          <span class="tag t1">Hardening</span>
+          <span class="tag t2">Kubernetes</span>
+          <span class="tag t1">Keycloak</span>
+        </div>
+        <ul class="xlist">
+          <li>Kapix est une startup spécialisée dans un outil No-Code. Mission principale : sécuriser l'infrastructure serveur pour garantir la confidentialité et l'intégrité des données.</li>
+          <li>Mise en place d'un reverse proxy Nginx sécurisé avec load balancer multi-backend, CORS, protection DDoS et simulation d'attaques.</li>
+          <li>Configuration HTTPS via certificats, déploiement GeoIP, règles de sécurité appliquées sur les serveurs de staging.</li>
+          <li>Intégration de Keycloak (IAM), déploiement de cluster Kubernetes production-ready sur DigitalOcean et Scaleway.</li>
+          <li>Load balancer base de données avec Pgpool-II, recherche d'outils d'analyse de vulnérabilités.</li>
+          <li>Rédaction d'un tutoriel complet, production d'une vidéo explicative Nginx, remise du rapport de recommandations.</li>
+        </ul>
+
+        <!-- Accordion semaines -->
+        <div class="wk-wrap">
+          <div class="wk-lbl">Détail par semaine</div>
+
+          <div class="wk">
+            <div class="wk-h" onclick="tw(this)">
+              <span>Semaine 1 — Prise en main &amp; installation Nginx</span>
+              <span class="wk-arr">▸</span>
+            </div>
+            <div class="wk-body"><div class="wk-inner">
+              <ul class="wk-list">
+                <li>Familiarisation avec l'infrastructure réseau de Kapix</li>
+                <li>Recherche de solutions de protection adaptées à l'infrastructure</li>
+                <li>Configuration du poste de travail</li>
+                <li>Installation et configuration d'un Nginx sur serveur de test</li>
+                <li>Mise en place du backend derrière le reverse proxy</li>
+              </ul>
+            </div></div>
+          </div>
+
+          <div class="wk">
+            <div class="wk-h" onclick="tw(this)">
+              <span>Semaine 2 — Load Balancer, CORS &amp; DDoS</span>
+              <span class="wk-arr">▸</span>
+            </div>
+            <div class="wk-body"><div class="wk-inner">
+              <ul class="wk-list">
+                <li>Création d'un load balancer Nginx avec second backend</li>
+                <li>Application d'un service CORS pour sécuriser le trafic</li>
+                <li>Configuration Nginx pour limiter les attaques DDoS</li>
+                <li>Simulation d'une attaque DDoS</li>
+              </ul>
+            </div></div>
+          </div>
+
+          <div class="wk">
+            <div class="wk-h" onclick="tw(this)">
+              <span>Semaine 3 — HTTPS, GeoIP, Keycloak &amp; Staging</span>
+              <span class="wk-arr">▸</span>
+            </div>
+            <div class="wk-body"><div class="wk-inner">
+              <ul class="wk-list">
+                <li>Extension du réseau de test vers les serveurs de staging Kapix</li>
+                <li>Création de certificats HTTPS</li>
+                <li>Mise en place du service GeoIP sur Nginx</li>
+                <li>Application des règles de sécurité sur les serveurs de staging</li>
+                <li>Déploiement et configuration de Keycloak</li>
+                <li>Début des recherches sur Kubernetes</li>
+              </ul>
+            </div></div>
+          </div>
+
+          <div class="wk">
+            <div class="wk-h" onclick="tw(this)">
+              <span>Semaine 4 — Kubernetes, Pgpool-II &amp; vidéo Nginx</span>
+              <span class="wk-arr">▸</span>
+            </div>
+            <div class="wk-body"><div class="wk-inner">
+              <ul class="wk-list">
+                <li>Load balancer base de données avec Pgpool-II</li>
+                <li>Recherche d'outils d'analyse de vulnérabilités (code &amp; infra)</li>
+                <li>Déploiement d'un cluster Kubernetes et test d'une application complète</li>
+                <li>Réalisation d'une vidéo explicative sur la configuration Nginx</li>
+              </ul>
+            </div></div>
+          </div>
+
+          <div class="wk">
+            <div class="wk-h" onclick="tw(this)">
+              <span>Semaine 5 — Cluster production-ready sur DigitalOcean &amp; Scaleway</span>
+              <span class="wk-arr">▸</span>
+            </div>
+            <div class="wk-body"><div class="wk-inner">
+              <ul class="wk-list">
+                <li>Rédaction d'un tutoriel complet reprenant toutes les installations</li>
+                <li>Approfondissement de Kubernetes (vidéos, articles, labs)</li>
+                <li>Création d'un cluster production-ready sur DigitalOcean et Scaleway</li>
+                <li>Création de templates pour le site Kapix</li>
+              </ul>
+            </div></div>
+          </div>
+
+          <div class="wk">
+            <div class="wk-h" onclick="tw(this)">
+              <span>Semaine 6 — Finalisation &amp; livrables</span>
+              <span class="wk-arr">▸</span>
+            </div>
+            <div class="wk-body"><div class="wk-inner">
+              <ul class="wk-list">
+                <li>Dernières modifications sur les templates</li>
+                <li>Administration d'une base de données pour un site web</li>
+                <li>Recherche sur l'automatisation DNS pour les sites créés sur Kapix</li>
+                <li>Remise du rapport de recommandations aux responsables</li>
+              </ul>
+            </div></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- HTB -->
+      <div class="htb card fu" style="margin-bottom:1.4rem;">
+        <div class="htb-i">⚔</div>
+        <div class="htb-b">
+          <div class="htb-t">HackTheBox — Pratique Offensive Continue</div>
+          <div class="htb-s">Auto-formation · Hacking éthique · CTF</div>
+          <div class="tags">
+            <span class="tag t4">Pentest</span>
+            <span class="tag t1">CTF</span>
+            <span class="tag t3">Linux / Windows</span>
+            <span class="tag t4">Privilege Escalation</span>
+            <span class="tag t4">Web Exploits</span>
+          </div>
+          <p style="font-size:.82rem;color:var(--tm);line-height:1.7;">
+            Pratique régulière sur HackTheBox pour maintenir mes compétences offensives en dehors du cursus.
+            Résolution de machines, exploitation web, escalade de privilèges et forensics.
+          </p>
+        </div>
+      </div>
+
+      <!-- OTW -->
+      <div class="xcard card fu" style="border-color:rgba(45,245,196,.14);">
+        <div class="xhdr">
+          <div>
+            <div class="xco" style="color:var(--c2);">Prochaine étape</div>
+            <div class="xrole">Alternance M2 — Cybersécurité</div>
+          </div>
+          <div class="xmeta">
+            <div class="xdate" style="border-color:rgba(45,245,196,.28);color:var(--c2);">Open to Work</div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag t1">SOC / Blue Team</span>
+          <span class="tag t4">Red Team</span>
+          <span class="tag t2">DevSecOps</span>
+          <span class="tag t3">Cloud Security</span>
+        </div>
+        <ul class="xlist">
+          <li>Disponible pour une alternance à partir de la rentrée 2026, dans le cadre du M2 Cybersécurité.</li>
+          <li>Intéressé par des missions offensives, défensives ou DevSecOps dans un contexte technique stimulant.</li>
+          <li>Rigueur, curiosité technique et pratique terrain régulière via HTB et projets personnels.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════ COMPÉTENCES ═══════ -->
+  <section id="competences">
+    <div class="wrap">
+      <div class="fu">
+        <p class="sec-eyebrow">Arsenal</p>
+        <h2 class="sh">Compétences</h2>
+        <p class="sh-sub">Langages, outils et domaines maîtrisés.</p>
+      </div>
+
+      <div class="sk-grid">
+        <div class="sk-card card fu">
+          <div class="sk-ico">💻</div>
+          <div class="sk-cat">Développement</div>
+          <div class="bar"><div class="bar-h"><span class="bar-n">Bash / Shell</span><span class="bar-p">60%</span></div><div class="bar-t"><div class="bar-f" style="width:60%"></div></div></div>
+          <div class="bar"><div class="bar-h"><span class="bar-n">Go</span><span class="bar-p">50%</span></div><div class="bar-t"><div class="bar-f" style="width:50%"></div></div></div>
+          <div class="bar"><div class="bar-h"><span class="bar-n">JavaScript</span><span class="bar-p">35%</span></div><div class="bar-t"><div class="bar-f" style="width:35%"></div></div></div>
+          <div class="bar"><div class="bar-h"><span class="bar-n">C</span><span class="bar-p">25%</span></div><div class="bar-t"><div class="bar-f" style="width:25%"></div></div></div>
+        </div>
+
+        <div class="sk-card card fu">
+          <div class="sk-ico">⚙️</div>
+          <div class="sk-cat">DevOps &amp; Cloud</div>
+          <div class="bar"><div class="bar-h"><span class="bar-n">Docker</span><span class="bar-p">65%</span></div><div class="bar-t"><div class="bar-f gn" style="width:65%"></div></div></div>
+          <div class="bar"><div class="bar-h"><span class="bar-n">Nginx</span><span class="bar-p">60%</span></div><div class="bar-t"><div class="bar-f gn" style="width:60%"></div></div></div>
+          <div class="bar"><div class="bar-h"><span class="bar-n">Kubernetes</span><span class="bar-p">20%</span></div><div class="bar-t"><div class="bar-f gn" style="width:20%"></div></div></div>
+          <div class="bar"><div class="bar-h"><span class="bar-n">Active Directory</span><span class="bar-p">65%</span></div><div class="bar-t"><div class="bar-f gn" style="width:65%"></div></div></div>
+        </div>
+
+        <div class="sk-card card fu">
+          <div class="sk-ico">🔐</div>
+          <div class="sk-cat">Cybersécurité</div>
+          <div class="bar"><div class="bar-h"><span class="bar-n">Infrastructure</span><span class="bar-p">75%</span></div><div class="bar-t"><div class="bar-f pu" style="width:75%"></div></div></div>
+          <div class="bar"><div class="bar-h"><span class="bar-n">Linux</span><span class="bar-p">80%</span></div><div class="bar-t"><div class="bar-f pu" style="width:80%"></div></div></div>
+          <div class="bar"><div class="bar-h"><span class="bar-n">Pentest</span><span class="bar-p">35%</span></div><div class="bar-t"><div class="bar-f pu" style="width:35%"></div></div></div>
+          <div class="bar"><div class="bar-h"><span class="bar-n">Analyse vulnérabilités</span><span class="bar-p">30%</span></div><div class="bar-t"><div class="bar-f pu" style="width:30%"></div></div></div>
+        </div>
+      </div>
+        <div class="tools-split">
+
+          <div class="tools-block offensive">
+            <div class="tools-subttl"><span class="tools-ico">⚔️</span> Offensif</div>
+            <div class="tools">
+              <span class="tool">Nmap</span>
+              <span class="tool">Metasploit</span>
+              <span class="tool">Burp Suite</span>
+              <span class="tool">SQLmap</span>
+              <span class="tool">Hydra</span>
+              <span class="tool">John the Ripper</span>
+              <span class="tool">Hashcat</span>
+              <span class="tool">Mimikatz</span>
+              <span class="tool">Impacket</span>
+              <span class="tool">BloodHound</span>
+              <span class="tool">Gobuster</span>
+              <span class="tool">Evil-WinRM</span>
+              <span class="tool">Rubeus</span>
+              <span class="tool">Bettercap</span>
+              <span class="tool">NetExec</span>
+            </div>
+          </div>
+
+          <div class="tools-block defensive">
+            <div class="tools-subttl"><span class="tools-ico">🛡️</span> Défensif</div>
+            <div class="tools">
+              <span class="tool">Wireshark</span>
+              <span class="tool">Wazuh</span>
+              <span class="tool">Suricata</span>
+              <span class="tool">pfSense</span>
+              <span class="tool">Fail2ban</span>
+              <span class="tool">Snort</span>
+              <span class="tool">Nessus</span>
+              <span class="tool">OpenVAS</span>
+              <span class="tool">Splunk</span>
+            </div>
+          </div>
+          </div>
+        </div>
+        </section>
+      <!-- CTA -->
+
+      <div id="contact" class="cta-card cardct fu">
+        <p class="sec-eyebrow" style="justify-content:center;">Contact</p>
+        <div class="cta-t">Une opportunité d'alternance ?</div>
+        <p class="cta-s">Disponible pour une alternance M2 en cybersécurité à partir de la rentrée 2026.</p>
+        <div class="cta-links">
+          <a href="mailto:maxime.lubrano@hotmail.fr" class="btn btn-p">✉️ Me contacter</a>
+          <a href="https://www.linkedin.com/in/maxime-lubrano-66b828263/" target="_blank" class="btn btn-o">LinkedIn</a>
+          <a href="https://github.com/Lura0XF0" target="_blank" class="btn btn-o">GitHub</a>
+        </div>
+      </div>
+    </div>
+  
+
+</main>
+
+<footer>
+  <p>© 2025 <a href="#home">Maxime Lubrano</a> — Portfolio Cybersécurité</p>
+</footer>
+
+
+<!-- ═══════ CV MODAL ═══════ -->
+<div id="cv-modal" class="cv-modal" aria-hidden="true">
+  <div class="cv-overlay"></div>
+
+  <div class="cv-container" role="dialog" aria-modal="true" aria-label="Aperçu du CV">
+    <button class="cv-close" type="button" onclick="closeCV()">✕</button>
+    <iframe src="./cv.pdf" class="cv-frame" title="CV — Maxime Lubrano"></iframe>
+  </div>
+</div>
+
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  /* ── Progress bar (fluide, sans jitter) ── */
+  const pb  = document.getElementById('pbar');
+  const nav = document.getElementById('nav');
+
+  let pbTicking = false;
+
+  function updateProgress() {
+    pbTicking = false;
+
+    const denom = (document.body.scrollHeight - window.innerHeight) || 1;
+    let pct = window.scrollY / denom;
+    // clamp 0..1
+    if (pct < 0) pct = 0;
+    if (pct > 1) pct = 1;
+
+    if (pb) pb.style.transform = `scaleX(${pct})`;
+    if (nav) nav.classList.toggle('scrolled', window.scrollY > 40);
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!pbTicking) {
+      pbTicking = true;
+      requestAnimationFrame(updateProgress);
+    }
+  }, { passive: true });
+
+  window.addEventListener('load', updateProgress);
+/* ── Active nav ── */
+const links = [...document.querySelectorAll('.nav-links a')];
+const navEl  = document.getElementById('nav');
+const secs   = [...document.querySelectorAll('section[id]')];
+const contactEl = document.getElementById('contact');
+
+function setActive(id){
+  links.forEach(a => a.classList.remove('active'));
+  const a = document.querySelector(`.nav-links a[href="#${id}"]`);
+  if (a) a.classList.add('active');
+}
+
+let raf = null;
+function updateActive(){
+  raf = null;
+
+  const navH = navEl ? navEl.offsetHeight : 68;
+  const lineY = navH + 14;
+
+  // 1) Priorité à CONTACT si le bloc est clairement dans la vue (même si c'est un div dans #competences)
+  if (contactEl) {
+    const r = contactEl.getBoundingClientRect();
+    const visiblePx = Math.min(window.innerHeight, r.bottom) - Math.max(0, r.top);
+    const visible = visiblePx > 0;
+    // Active Contact dès qu'il est majoritairement visible OU que son haut passe dans la zone utile
+    if (visible && (visiblePx >= Math.min(260, r.height * 0.55) || (r.top <= lineY && r.bottom > lineY))) {
+      setActive('contact');
+      return;
+    }
+  }
+
+  // 2) Sinon, section active via la ligne sous la navbar
+  let current = null;
+  for (const s of secs){
+    const r = s.getBoundingClientRect();
+    if (r.top <= lineY && r.bottom > lineY) { current = s.id; break; }
+  }
+  if (current) setActive(current);
+}
+
+window.addEventListener('scroll', () => {
+  if (raf) return;
+  raf = requestAnimationFrame(updateActive);
+}, { passive:true });
+
+window.addEventListener('load', updateActive);
+
+/* ── Fade-up ── */
+  const fuObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); fuObs.unobserve(e.target); } });
+  }, { threshold: 0.07, rootMargin: '0px 0px -35px 0px' });
+  document.querySelectorAll('.fu').forEach(el => fuObs.observe(el));
+
+  /* Hero visible immediately with stagger */
+  document.querySelectorAll('#home .fu').forEach((el, i) => {
+    setTimeout(() => el.classList.add('vis'), 60 + i * 85);
+  });
+
+  /* ── Skill bars (ordre: Développement → DevOps → Cybersécurité) ── */
+  const skillsSec = document.getElementById('competences');
+  let skillsAnimated = false;
+
+  function animateSkillBarsOrdered() {
+    if (skillsAnimated) return;
+    skillsAnimated = true;
+
+    const cards = [...document.querySelectorAll('#competences .sk-grid .sk-card')];
+    let delay = 0;
+
+    cards.forEach(card => {
+      const bars = [...card.querySelectorAll('.bar-f')];
+
+      bars.forEach((bar, i) => {
+        const d = delay + i * 120;
+        window.setTimeout(() => bar.classList.add('vis'), d);
+      });
+
+      // petit gap entre catégories
+      delay += bars.length * 130 + 50;
+    });
+  }
+
+  if (skillsSec) {
+    const skillsObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        animateSkillBarsOrdered();
+        skillsObs.disconnect();
+      });
+    }, { threshold: 0.25 });
+
+    skillsObs.observe(skillsSec);
+  }
+/* ── Week accordion ── */
+  function tw(hdr) {
+    const wk     = hdr.parentElement;
+    const isOpen = wk.classList.contains('open');
+    document.querySelectorAll('.wk.open').forEach(w => w.classList.remove('open'));
+    if (!isOpen) wk.classList.add('open');
+  }
+
+  /* ── CV download ── */
+  // Pour activer : remplace href="#" par href="./cv.pdf" sur les boutons cvbtn1/2/3
+
+  /* ── CV modal ── */
+  const cvBtn   = document.getElementById('cvbtn');
+  const cvModal = document.getElementById('cv-modal');
+  const cvOv    = document.querySelector('#cv-modal .cv-overlay');
+
+  function openCV() {
+    if (!cvModal) return;
+    cvModal.classList.add('active');
+    cvModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCV() {
+    if (!cvModal) return;
+    cvModal.classList.remove('active');
+    cvModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  if (cvBtn) {
+    cvBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openCV();
+    });
+  }
+
+  if (cvOv) cvOv.addEventListener('click', closeCV);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeCV();
+  });
+
+  window.closeCV = closeCV;
+
+</script>
+</body>
+</html>
