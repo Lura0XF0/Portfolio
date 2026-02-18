@@ -3,10 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050a12" />
+  <meta name="description" content="Maxime Lubrano - Étudiant M1→M2 Cybersécurité, recherche alternance. Infrastructure, DevOps, Pentest." />
   <title>Maxime Lubrano — Cybersécurité</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <!-- Optimisation: preload critical CSS -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" />
   <style>
     /* ───────────────────────────────────────
        RESET & VARS
@@ -72,25 +76,6 @@
       opacity: .9;
     }
 
-    /* Floating particles */
-    #particles {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      overflow: hidden;
-    }
-    .particle {
-      position: absolute;
-      width: 3px; height: 3px;
-      background: rgba(56,200,240,.3);
-      border-radius: 50%;
-      animation: float-particle linear infinite;
-    }
-    @keyframes float-particle {
-      0% {  opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
-      100% {  opacity: 0; }
-    }
-
     /* Scanning line */
     #scan-line {
       position: fixed; top: 0; left: 0; right: 0; height: 1px;
@@ -98,7 +83,10 @@
       z-index: 1; pointer-events: none;
       animation: scan 8s linear infinite;
     }
-    @keyframes scan { 0%{top:0} 100%{top:100vh} }
+    @keyframes scan {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(100vh); }
+    }
 
     /* ───────────────────────────────────────
        SCROLL BAR
@@ -311,8 +299,8 @@
     h1.hero-name span:nth-child(7) { animation-delay: 0.6s; }
 
     @keyframes wave {
-      0%, 100% {  }
-      20% {  }
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      20% { transform: translate3d(0, -5px, 0); }
     }
 
     /* Glitch effect on hover */
@@ -1186,7 +1174,6 @@ main{ isolation: isolate; }
 
 <div id="bg-glow"></div>
 <div id="bg-grid"></div>
-<div id="particles"></div>
 <div id="scan-line"></div>
 <div id="pbar"></div>
 
@@ -1855,29 +1842,6 @@ function openCV() {
   if (cvOv) cvOv.addEventListener('click', closeCV);
   if (cvClose) cvClose.addEventListener('click', closeCV);
 
-  /* ── Generate floating particles ── */
-  const particlesContainer = document.getElementById('particles');
-  if (particlesContainer) {
-    for (let i = 0; i < 30; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-
-      const startX = Math.random() * 100;
-      const drift = (Math.random() - 0.5) * 100;
-      const duration = 15 + Math.random() * 20;
-      const delay = Math.random() * 10;
-      const size = 2 + Math.random() * 3;
-
-      particle.style.left = startX + '%';
-      particle.style.setProperty('--drift', drift + 'px');
-      particle.style.animationDuration = duration + 's';
-      particle.style.animationDelay = delay + 's';
-      particle.style.width = size + 'px';
-      particle.style.height = size + 'px';
-
-      particlesContainer.appendChild(particle);
-    }
-  }
   document.getElementById("contact-btn").addEventListener("click", function(e){
     e.preventDefault();
 
@@ -2043,7 +2007,7 @@ const promptHTML = '<span class="prompt">lura@kali</span>:<span class="prompt">~
   }
 
   function schedule(){
-    const next = 15000 + Math.random()*22000; // 9–20s
+    const next = 15000 + Math.random() * 20000; // 15-35s
     setTimeout(async () => {
       await runOnce();
       schedule();
